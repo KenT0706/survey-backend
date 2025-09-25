@@ -1,7 +1,5 @@
 // api/index.js
-const app = require("../server");
-module.exports = app;
+import serverless from "serverless-http";
+import app from "../server.js";
 
-module.exports = (req, res) => {
-  res.status(200).json({ message: "Survey Backend API is running!" });
-};
+export const handler = serverless(app);

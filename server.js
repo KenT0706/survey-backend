@@ -1,3 +1,4 @@
+// server.js
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -6,8 +7,7 @@ import HRSelfAssessmentResponse from "./models/HRSelfAssessmentResponse.js";
 import UserSurveyResponse from "./models/UserSurveyResponse.js";
 import ManagementResponse from "./models/ManagementResponse.js";
 import { verifyAdmin } from "./lib/adminAuth.js";
-import authRoutes from "./api/auth.js"; // ✅ Import auth routes
-
+import authRoutes from "./api/auth.js";
 
 dotenv.config();
 
@@ -15,7 +15,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Connect to MongoDB
+// MongoDB connection
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -26,7 +26,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 // ---------------------
 // Auth routes
 // ---------------------
-app.use("/auth", authRoutes); // ✅ Mount auth router
+app.use("/auth", authRoutes);
 
 // ---------------------
 // Management Responses
@@ -127,8 +127,4 @@ app.delete("/api/user-survey", async (req, res) => {
   }
 });
 
-// ---------------------
-// Start server
-// ---------------------
-const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+export default app;
