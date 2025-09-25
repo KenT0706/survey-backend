@@ -1,3 +1,4 @@
+// api/auth.js
 import dbConnect from "../lib/dbConnect.js";
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
@@ -5,12 +6,16 @@ import jwt from "jsonwebtoken";
 const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey";
 
 export default async function handler(req, res) {
-  // --- CORS headers ---
-  res.setHeader("Access-Control-Allow-Origin", "*"); // or "http://localhost:5173" for stricter
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  // Always set CORS headers
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Access-Control-Allow-Origin", "*"); // you can restrict to http://localhost:5173 if you prefer
+  res.setHeader("Access-Control-Allow-Methods", "GET,OPTIONS,PATCH,DELETE,POST,PUT");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Authorization"
+  );
 
-  // Handle preflight OPTIONS requests
+  // Handle preflight
   if (req.method === "OPTIONS") {
     return res.status(200).end();
   }
@@ -22,7 +27,7 @@ export default async function handler(req, res) {
     return res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 
-  const { action } = req.query; // /api/auth?action=login or register
+  const { action } = req.query;
   const { username, password } = req.body;
 
   try {
