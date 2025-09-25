@@ -1,6 +1,4 @@
 // api/auth.js
-console.log("🔄 Auth API called:", req.method, req.url);
-
 import dbConnect from "../lib/dbConnect.js";
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
