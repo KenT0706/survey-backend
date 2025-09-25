@@ -2,7 +2,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import mongoose from "mongoose";
+import { connectDB } from "./lib/mongodb.js";
 import HRSelfAssessmentResponse from "./models/HRSelfAssessmentResponse.js";
 import UserSurveyResponse from "./models/UserSurveyResponse.js";
 import ManagementResponse from "./models/ManagementResponse.js";
@@ -15,13 +15,15 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// MongoDB connect
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-  .then(() => console.log("MongoDB connected"))
-  .catch(err => console.error("MongoDB connection error:", err));
+// Middleware to ensure DB connection for each request
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    res.status(500).json({ error: "Database connection failed" });
+  }
+});
 
 // Routes
 app.use("/auth", authRoutes);
