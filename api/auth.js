@@ -5,6 +5,16 @@ import jwt from "jsonwebtoken";
 const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey";
 
 export default async function handler(req, res) {
+  // --- CORS headers ---
+  res.setHeader("Access-Control-Allow-Origin", "*"); // or "http://localhost:5173" for stricter
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
+  // Handle preflight OPTIONS requests
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+
   await dbConnect();
 
   if (req.method !== "POST") {
@@ -17,12 +27,10 @@ export default async function handler(req, res) {
 
   try {
     if (action === "register") {
-      // ✅ Prevent more than 1 admin
       const existingAdmin = await User.findOne({ role: "admin" });
       if (existingAdmin)
         return res.status(400).json({ success: false, message: "Admin exists" });
 
-      // Prevent duplicate username
       const existingUser = await User.findOne({ username });
       if (existingUser)
         return res.status(400).json({ success: false, message: "Username exists" });
