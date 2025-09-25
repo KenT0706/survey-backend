@@ -2,7 +2,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import { connectDB } from "./lib/mongodb.js";
+import mongoose from "mongoose";
 import HRSelfAssessmentResponse from "./models/HRSelfAssessmentResponse.js";
 import UserSurveyResponse from "./models/UserSurveyResponse.js";
 import ManagementResponse from "./models/ManagementResponse.js";
@@ -15,13 +15,24 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Middleware to ensure DB connection for each request
+// Connect to MongoDB (lazy, cached)
+let isConnected = false;
+async function connectDB() {
+  if (isConnected) return;
+  await mongoose.connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
+  isConnected = true;
+  console.log("✅ MongoDB connected");
+}
 app.use(async (req, res, next) => {
   try {
     await connectDB();
     next();
   } catch (err) {
-    res.status(500).json({ error: "Database connection failed" });
+    console.error("MongoDB connection error:", err);
+    res.status(500).json({ error: "DB connection failed" });
   }
 });
 
