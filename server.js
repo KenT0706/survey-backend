@@ -15,7 +15,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// MongoDB connection
+// MongoDB connect
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -23,10 +23,12 @@ mongoose.connect(process.env.MONGODB_URI, {
   .then(() => console.log("MongoDB connected"))
   .catch(err => console.error("MongoDB connection error:", err));
 
-// ---------------------
-// Auth routes
-// ---------------------
+// Routes
 app.use("/auth", authRoutes);
+
+app.get("/api", (req, res) => {
+  res.json({ message: "Survey Backend API is running!" });
+});
 
 // ---------------------
 // Management Responses
