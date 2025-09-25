@@ -1,3 +1,4 @@
+//api/user-survey.js
 import dbConnect from "../lib/dbConnect.js";
 import UserSurveyResponse from "../models/UserSurveyResponse.js";
 import { verifyAdmin } from "../lib/adminAuth.js";

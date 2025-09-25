@@ -1,3 +1,4 @@
+//api/hr-self-assessment.js
 import dbConnect from "../lib/dbConnect.js";
 import HRSelfAssessmentResponse from "../models/HRSelfAssessmentResponse.js";
 import { verifyAdmin } from "../lib/adminAuth.js";
