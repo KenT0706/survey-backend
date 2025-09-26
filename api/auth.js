@@ -2,24 +2,11 @@
 import dbConnect from "../lib/dbConnect.js";
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
+import withCors from "./_cors.js";
 
 const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey";
 
-export default async function handler(req, res) {
-  // Always set CORS headers
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader("Access-Control-Allow-Origin", "*"); // you can restrict to http://localhost:5173 if you prefer
-  res.setHeader("Access-Control-Allow-Methods", "GET,OPTIONS,PATCH,DELETE,POST,PUT");
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Authorization"
-  );
-
-  // Handle preflight
-  if (req.method === "OPTIONS") {
-    return res.status(200).end();
-  }
-
+async function handler(req, res) {
   await dbConnect();
 
   if (req.method !== "POST") {
@@ -73,3 +60,5 @@ export default async function handler(req, res) {
     return res.status(500).json({ success: false, error: err.message });
   }
 }
+
+export default withCors(handler);
