@@ -2,11 +2,17 @@
 import dbConnect from "../lib/dbConnect.js";
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
-import withCors from "./_cors.js";
+import { setCORSHeaders, handlePreflight } from "../lib/cors.js";
 
 const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey";
 
-async function handler(req, res) {
+export default async function handler(req, res) {
+  // Set CORS headers
+  setCORSHeaders(res);
+  
+  // Handle preflight request
+  if (handlePreflight(req, res)) return;
+
   await dbConnect();
 
   if (req.method !== "POST") {
@@ -60,5 +66,3 @@ async function handler(req, res) {
     return res.status(500).json({ success: false, error: err.message });
   }
 }
-
-export default withCors(handler);
