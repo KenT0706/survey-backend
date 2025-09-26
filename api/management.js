@@ -2,14 +2,9 @@
 import dbConnect from "../lib/dbConnect.js";
 import ManagementResponse from "../models/ManagementResponse.js";
 import { verifyAdmin } from "../lib/adminAuth.js";
-import { setCORSHeaders, handlePreflight } from '../lib/cors.js';
+import { enableCORS } from '../lib/cors.js';
 
-export default async function handler(req, res) {
-  // Handle preflight requests
-  if (handlePreflight(req, res)) return;
-  
-  // Set CORS headers for actual requests
-  setCORSHeaders(res);
+async function handler(req, res) {
   await dbConnect();
 
   if (req.method === "POST") {
@@ -30,9 +25,7 @@ export default async function handler(req, res) {
       const response = new ManagementResponse(payload);
       await response.save();
 
-      return res
-        .status(201)
-        .json({ success: true, message: "Management response saved!" });
+      return res.status(201).json({ success: true, message: "Management response saved!" });
     } catch (err) {
       return res.status(500).json({ success: false, error: err.message });
     }
@@ -45,9 +38,9 @@ export default async function handler(req, res) {
     try {
       const responses = await ManagementResponse.find().sort({ submittedAt: -1 });
       const normalized = responses.map(r => ({
-      ...r.toObject(),
-      feedback: [r.obstacles, r.strengthsWeaknesses].filter(Boolean).join("\n\n"),
-    }));
+        ...r.toObject(),
+        feedback: [r.obstacles, r.strengthsWeaknesses].filter(Boolean).join("\n\n"),
+      }));
       return res.status(200).json(normalized);
     } catch (err) {
       return res.status(500).json({ success: false, error: err.message });
@@ -57,3 +50,6 @@ export default async function handler(req, res) {
   res.setHeader("Allow", ["GET", "POST"]);
   res.status(405).end(`Method ${req.method} Not Allowed`);
 }
+
+// Export with CORS enabled
+export default enableCORS(handler);

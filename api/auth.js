@@ -2,23 +2,16 @@
 import dbConnect from "../lib/dbConnect.js";
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
-import { setCORSHeaders, handlePreflight } from '../lib/cors.js';
+import { enableCORS } from '../lib/cors.js';
 
-// ✅ ADD THIS LINE - Define JWT_SECRET
 const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey";
 
-export default async function handler(req, res) {
-  // Handle preflight requests
-  if (handlePreflight(req, res)) return;
-  
-  // Set CORS headers for actual requests
-  setCORSHeaders(res);
-
-  // ✅ ADD THIS CHECK - Validate JWT_SECRET exists
+async function handler(req, res) {
+  // Check if JWT_SECRET is available
   if (!JWT_SECRET) {
     return res.status(500).json({ 
       success: false, 
-      error: "Server configuration error: JWT_SECRET not defined" 
+      error: "Server configuration error" 
     });
   }
 
@@ -58,7 +51,7 @@ export default async function handler(req, res) {
 
       const token = jwt.sign(
         { id: user._id, role: user.role },
-        JWT_SECRET, // ✅ Now this variable is defined
+        JWT_SECRET,
         { expiresIn: "1h" }
       );
 
@@ -75,3 +68,6 @@ export default async function handler(req, res) {
     return res.status(500).json({ success: false, error: err.message });
   }
 }
+
+// Export with CORS enabled
+export default enableCORS(handler);

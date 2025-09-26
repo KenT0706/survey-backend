@@ -2,14 +2,9 @@
 import dbConnect from "../lib/dbConnect.js";
 import UserSurveyResponse from "../models/UserSurveyResponse.js";
 import { verifyAdmin } from "../lib/adminAuth.js";
-import { setCORSHeaders, handlePreflight } from '../lib/cors.js';
+import { enableCORS } from '../lib/cors.js';
 
-export default async function handler(req, res) {
-  // Handle preflight requests
-  if (handlePreflight(req, res)) return;
-  
-  // Set CORS headers for actual requests
-  setCORSHeaders(res);
+async function handler(req, res) {
   await dbConnect();
 
   if (req.method === "POST") {
@@ -64,3 +59,6 @@ export default async function handler(req, res) {
   res.setHeader("Allow", ["GET", "POST", "DELETE"]);
   res.status(405).end(`Method ${req.method} Not Allowed`);
 }
+
+// Export with CORS enabled
+export default enableCORS(handler);
