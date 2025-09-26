@@ -2,32 +2,14 @@
 import dbConnect from "../lib/dbConnect.js";
 import UserSurveyResponse from "../models/UserSurveyResponse.js";
 import { verifyAdmin } from "../lib/adminAuth.js";
-import Cors from 'cors';
-
-
-// Initialize CORS middleware
-const cors = Cors({
-  origin: '*', // or specify your frontend URL: 'http://localhost:3000'
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-  credentials: true
-});
-
-// Helper method to wait for a middleware to execute before continuing
-function runMiddleware(req, res, fn) {
-  return new Promise((resolve, reject) => {
-    fn(req, res, (result) => {
-      if (result instanceof Error) {
-        return reject(result);
-      }
-      return resolve(result);
-    });
-  });
-}
+import { setCORSHeaders, handlePreflight } from '../lib/cors.js';
 
 export default async function handler(req, res) {
-  // Run CORS middleware
-  await runMiddleware(req, res, cors);
+  // Handle preflight requests
+  if (handlePreflight(req, res)) return;
+  
+  // Set CORS headers for actual requests
+  setCORSHeaders(res);
   await dbConnect();
 
   if (req.method === "POST") {

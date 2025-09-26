@@ -2,33 +2,14 @@
 import dbConnect from "../lib/dbConnect.js";
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
-import Cors from 'cors';
-
-const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey";
-
-// Initialize CORS middleware
-const cors = Cors({
-  origin: '*', // or specify your frontend URL: 'http://localhost:3000'
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-  credentials: true
-});
-
-// Helper method to wait for a middleware to execute before continuing
-function runMiddleware(req, res, fn) {
-  return new Promise((resolve, reject) => {
-    fn(req, res, (result) => {
-      if (result instanceof Error) {
-        return reject(result);
-      }
-      return resolve(result);
-    });
-  });
-}
+import { setCORSHeaders, handlePreflight } from '../lib/cors.js';
 
 export default async function handler(req, res) {
-  // Run CORS middleware
-  await runMiddleware(req, res, cors);
+  // Handle preflight requests
+  if (handlePreflight(req, res)) return;
+  
+  // Set CORS headers for actual requests
+  setCORSHeaders(res);
 
   await dbConnect();
 
