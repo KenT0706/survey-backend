@@ -5,6 +5,7 @@
   ],
   "routes": [
     { "src": "/api/hr-self-assessment", "dest": "/api/hr-self-assessment.js" },
+    { "src": "/api/management", "dest": "/api/management.js" },
     { "src": "/api/management-responses", "dest": "/api/management.js" },
     { "src": "/api/user-survey", "dest": "/api/user-survey.js" },
     { "src": "/api/auth", "dest": "/api/auth.js" },
