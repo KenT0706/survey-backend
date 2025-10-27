@@ -1,7 +1,6 @@
 {
   "name": "survey-backend",
   "version": "1.0.0",
-<<<<<<< HEAD
   "type": "module",
   "scripts": {
     "dev": "vercel dev",
@@ -17,25 +16,5 @@
   },
   "engines": {
     "node": ">=18.x"
-=======
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "type": "module",
-  "dependencies": {
-    "bcrypt": "^6.0.0",
-    "bcryptjs": "^3.0.2",
-    "cors": "^2.8.5",
-    "dotenv": "^16.1.4",
-    "express": "^5.1.0",
-    "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.18.0",
-    "serverless-http": "^4.0.0"
->>>>>>> e7133960979c72122969b6f163b68653db7c55ff
   }
 }
