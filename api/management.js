@@ -48,7 +48,6 @@ export default async function handler(req, res) {
     }
   }
 
-<<<<<<< HEAD
   if (req.method === "DELETE") {
     const admin = verifyAdmin(req, res);
     if (!admin) return;
@@ -66,8 +65,5 @@ export default async function handler(req, res) {
   }
 
   res.setHeader("Allow", ["GET", "POST", "DELETE"]);
-=======
-  res.setHeader("Allow", ["GET", "POST"]);
->>>>>>> e7133960979c72122969b6f163b68653db7c55ff
   res.status(405).end(`Method ${req.method} Not Allowed`);
 }
