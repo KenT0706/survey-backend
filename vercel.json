@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "builds": [
+<<<<<<< HEAD
+    { "src": "api/**/*.js", "use": "@vercel/node" }
+=======
+    { "src": "api/index.js", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "src": "/(.*)", "dest": "api/index.js" }
+>>>>>>> e7133960979c72122969b6f163b68653db7c55ff
+  ]
+}
