@@ -1,7 +1,4 @@
-<<<<<<< HEAD
 //models/User.js
-=======
->>>>>>> e7133960979c72122969b6f163b68653db7c55ff
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs"; // ✅ use bcryptjs
 

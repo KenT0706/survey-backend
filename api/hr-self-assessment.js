@@ -1,12 +1,10 @@
-<<<<<<< HEAD
 //api/hr-self-assessment.js
-=======
->>>>>>> e7133960979c72122969b6f163b68653db7c55ff
 import dbConnect from "../lib/dbConnect.js";
 import HRSelfAssessmentResponse from "../models/HRSelfAssessmentResponse.js";
 import { verifyAdmin } from "../lib/adminAuth.js";
+import { enableCORS } from '../lib/cors.js';
 
-export default async function handler(req, res) {
+async function handler(req, res) {
   await dbConnect();
 
   if (req.method === "POST") {
@@ -60,3 +58,6 @@ export default async function handler(req, res) {
   res.setHeader("Allow", ["GET", "POST", "DELETE"]);
   res.status(405).end(`Method ${req.method} Not Allowed`);
 }
+
+// Export with CORS enabled
+export default enableCORS(handler);
