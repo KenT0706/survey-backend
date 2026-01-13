@@ -8,6 +8,7 @@
     { "src": "/api/management", "dest": "/api/management.js" },
     { "src": "/api/management-responses", "dest": "/api/management.js" },
     { "src": "/api/user-survey", "dest": "/api/user-survey.js" },
+    { "src": "/api/feedback", "dest": "/api/feedback.js" },
     { "src": "/api/auth", "dest": "/api/auth.js" },
     { "src": "/api/test", "dest": "/api/test.js" },
     { "src": "/api/(.*)", "dest": "/api/$1" },
