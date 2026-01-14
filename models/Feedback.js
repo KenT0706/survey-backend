@@ -1,5 +1,5 @@
-//models/Feedback.js
-const mongoose = require('mongoose');
+// models/Feedback.js 
+import mongoose from "mongoose";
 
 const feedbackSchema = new mongoose.Schema({
   // Basic Information
@@ -115,14 +115,14 @@ const feedbackSchema = new mongoose.Schema({
   ipAddress: String,
   userAgent: String
 }, {
-  timestamps: true // Adds createdAt and updatedAt automatically
+  timestamps: true
 });
 
-// Create index for efficient queries
+// Create index for efficient queries (moved outside schema)
 feedbackSchema.index({ clientCompany: 1, submissionDate: -1 });
 feedbackSchema.index({ email: 1 });
 feedbackSchema.index({ submissionDate: -1 });
 
-const Feedback = mongoose.model('Feedback', feedbackSchema);
-
-module.exports = Feedback;
+// MATCH THE EXACT PATTERN FROM ManagementResponse.js
+export default mongoose.models.Feedback ||
+  mongoose.model("Feedback", feedbackSchema);

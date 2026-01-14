@@ -71,10 +71,15 @@ async function handler(req, res) {
       const responses = await Feedback.find().sort({ submissionDate: -1 });
       
       // Add surveyType for consistency with other surveys in dashboard
-      const normalized = responses.map(r => ({
-        ...r.toObject(),
-        surveyType: 'feedback'
-      }));
+      const normalized = responses.map(r => {
+  const obj = r.toObject();
+  return {
+    ...obj,
+    _id: obj._id.toString(),  // Convert ObjectId to string
+    id: obj._id.toString(),   // Add id field for consistency
+    surveyType: 'feedback'
+  };
+});
       
       return res.status(200).json(normalized);
     } catch (err) {
